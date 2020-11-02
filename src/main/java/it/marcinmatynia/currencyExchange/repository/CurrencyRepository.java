@@ -1,7 +1,7 @@
 package it.marcinmatynia.currencyExchange.repository;
 
-import it.marcinmatynia.currencyExchange.model.Currencies;
+import it.marcinmatynia.currencyExchange.model.LogCallCurrencies;
 
 public interface CurrencyRepository {
-    Currencies save(Currencies entity);
+    LogCallCurrencies save(LogCallCurrencies entity);
 }

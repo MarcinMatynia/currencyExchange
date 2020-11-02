@@ -8,17 +8,16 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "currencies")
+@Table(name = "log_call_currencies")
 @Getter
-@Setter
 @NoArgsConstructor
-public class Currencies {
+public class LogCallCurrencies {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private LocalDateTime dateTime;
 
-    public Currencies(final LocalDateTime dateTime) {
+    public LogCallCurrencies(final LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 }
