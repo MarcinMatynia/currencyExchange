@@ -2,7 +2,7 @@ package it.marcinmatynia.currencyExchange.service;
 
 import it.marcinmatynia.currencyExchange.Currency;
 import it.marcinmatynia.currencyExchange.client.NbpApiClient;
-import it.marcinmatynia.currencyExchange.dto.CurrencyExchangeDTO;
+import it.marcinmatynia.currencyExchange.dto.ExchangeDTO;
 import it.marcinmatynia.currencyExchange.exception.InvalidFieldsException;
 import it.marcinmatynia.currencyExchange.model.Exchange;
 import it.marcinmatynia.currencyExchange.repository.ExchangeRepository;
@@ -23,13 +23,13 @@ public class ExchangeService {
     private final SmartValidator smartValidator;
     private final ExchangeRepository exchangeRepository;
 
-    //TODO: Refactor?!
-    public Exchange currencyExchange(final CurrencyExchangeDTO currencyExchangeDTO, BindingResult bindingResult) {
-        validate(currencyExchangeDTO, bindingResult);
+    //TODO: prepare tests! :)
+    public Exchange currencyExchange(final ExchangeDTO exchangeDTO, BindingResult bindingResult) {
+        validate(exchangeDTO, bindingResult);
 
-        var amount = currencyExchangeDTO.getAmount();
-        var fromCurrency = currencyExchangeDTO.getFromCurrency();
-        var toCurrency = currencyExchangeDTO.getToCurrency();
+        var amount = exchangeDTO.getAmount();
+        var fromCurrency = exchangeDTO.getFromCurrency();
+        var toCurrency = exchangeDTO.getToCurrency();
         BigDecimal amountAfterExchange;
 
         if (fromCurrency != Currency.PLN && toCurrency != Currency.PLN) {
@@ -43,9 +43,8 @@ public class ExchangeService {
         } else {
             var fromCurrencyExchangeRate = getExchangeRate(fromCurrency, true);
             amountAfterExchange = amount.multiply(fromCurrencyExchangeRate);
+            amountAfterExchange = amountAfterExchange.setScale(2, RoundingMode.HALF_UP);
         }
-
-        amountAfterExchange = amountAfterExchange.setScale(2, RoundingMode.HALF_UP);
 
         var exchange = new Exchange(amount, fromCurrency.toString(), toCurrency.toString(), amountAfterExchange, LocalDateTime.now());
         exchangeRepository.save(exchange);
@@ -53,12 +52,16 @@ public class ExchangeService {
     }
 
     private BigDecimal getExchangeRate(final Currency currency, final boolean isBid) {
-        return nbpApiClient.getExchangeRate(currency, isBid);
+        var rate = nbpApiClient.getExchangeRate(currency);
+        if (isBid) {
+            return rate.getBid();
+        }
+        return rate.getAsk();
     }
 
-    private void validate(final CurrencyExchangeDTO currencyExchangeDTO, BindingResult bindingResult) {
-        smartValidator.validate(currencyExchangeDTO, bindingResult);
-        if (currencyExchangeDTO.getFromCurrency() == currencyExchangeDTO.getToCurrency()) {
+    private void validate(final ExchangeDTO exchangeDTO, BindingResult bindingResult) {
+        smartValidator.validate(exchangeDTO, bindingResult);
+        if (exchangeDTO.getFromCurrency() == exchangeDTO.getToCurrency()) {
             var fieldError = new FieldError("currency", "currency", "Currencies cannot be the same.");
             bindingResult.addError(fieldError);
         }

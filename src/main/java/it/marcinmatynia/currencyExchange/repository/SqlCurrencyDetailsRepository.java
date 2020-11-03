@@ -1,9 +1,9 @@
 package it.marcinmatynia.currencyExchange.repository;
 
-import it.marcinmatynia.currencyExchange.model.ExchangeRate;
+import it.marcinmatynia.currencyExchange.model.CurrencyDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-interface SqlExchangeRateRepository extends ExchangeRateRepository, JpaRepository<ExchangeRate, Integer> {
+interface SqlCurrencyDetailsRepository extends CurrencyDetailsRepository, JpaRepository<CurrencyDetails, Integer> {
 }

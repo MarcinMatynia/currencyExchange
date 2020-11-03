@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CurrencyExchangeDTO {
+public class ExchangeDTO {
     @NotNull
     @DecimalMin("0.01")
     private BigDecimal amount;

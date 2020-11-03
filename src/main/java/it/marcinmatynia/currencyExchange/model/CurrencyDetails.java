@@ -9,21 +9,23 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "exchange_rates")
+@Table(name = "currency_details")
 @Getter
 @Setter
 @NoArgsConstructor
-public class ExchangeRate {
+public class CurrencyDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String currency;
-    private BigDecimal rate;
+    private BigDecimal bidRate;
+    private BigDecimal askRate;
     private LocalDateTime dateTime;
 
-    public ExchangeRate(final String currency, final BigDecimal rate, final LocalDateTime dateTime) {
+    public CurrencyDetails(final String currency, final BigDecimal bidRate, final BigDecimal askRate, final LocalDateTime dateTime) {
         this.currency = currency;
-        this.rate = rate;
+        this.bidRate = bidRate;
+        this.askRate = askRate;
         this.dateTime = dateTime;
     }
 }
