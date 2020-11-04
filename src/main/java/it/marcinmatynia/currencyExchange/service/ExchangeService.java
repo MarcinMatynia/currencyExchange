@@ -23,7 +23,6 @@ public class ExchangeService {
     private final SmartValidator smartValidator;
     private final ExchangeRepository exchangeRepository;
 
-    //TODO: prepare tests! :)
     public Exchange currencyExchange(final ExchangeDTO exchangeDTO, BindingResult bindingResult) {
         validate(exchangeDTO, bindingResult);
 
