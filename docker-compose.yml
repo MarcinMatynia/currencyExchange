@@ -1,0 +1,18 @@
+version: '3'
+services:
+  api:
+    build: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/currencyexchange
+  db:
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_PASSWORD: sa
+      POSTGRES_USER: postgres
+      POSTGRES_DB: currencyexchange
+    ports:
+      - "5432:5432"
